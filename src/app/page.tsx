@@ -99,15 +99,15 @@ export default function HomePage() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/workflows/knowledge">
-                <motion.button
+              <Link href="/workflows/knowledge" className="inline-block">
+                <motion.div
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="btn-primary inline-flex items-center gap-2"
                 >
                   Explore Knowledge Activation
                   <ArrowRight className="w-5 h-5" />
-                </motion.button>
+                </motion.div>
               </Link>
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -189,14 +189,14 @@ export default function HomePage() {
                   {feature.description}
                 </p>
                 {feature.link && (
-                  <Link href={feature.link}>
-                    <motion.button
+                  <Link href={feature.link} className="inline-block">
+                    <motion.div
                       whileHover={{ x: 5 }}
-                      className="inline-flex items-center gap-2 text-emerald-600 font-semibold hover:text-emerald-700 transition-colors"
+                      className="inline-flex items-center gap-2 text-emerald-600 font-semibold hover:text-emerald-700 transition-colors cursor-pointer"
                     >
                       Learn More
                       <ArrowRight className="w-4 h-4" />
-                    </motion.button>
+                    </motion.div>
                   </Link>
                 )}
               </motion.div>
@@ -223,25 +223,25 @@ export default function HomePage() {
               that understands context, not just keywords. Achieve 92% adoption while saving $18,000 per lawyer annually.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-              <Link href="/workflows/knowledge">
-                <motion.button
+              <Link href="/workflows/knowledge" className="inline-block">
+                <motion.div
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="bg-emerald-600 text-white hover:bg-emerald-700 px-8 py-4 rounded-lg font-semibold transition-all duration-200 inline-flex items-center gap-2"
+                  className="bg-emerald-600 text-white hover:bg-emerald-700 px-8 py-4 rounded-lg font-semibold transition-all duration-200 inline-flex items-center gap-2 cursor-pointer"
                 >
                   <Search className="w-5 h-5" />
                   Try Knowledge Search Demo
-                </motion.button>
+                </motion.div>
               </Link>
-              <Link href="/workflows/knowledge#roi">
-                <motion.button
+              <Link href="/workflows/knowledge#roi" className="inline-block">
+                <motion.div
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="bg-white text-emerald-600 hover:bg-emerald-50 px-8 py-4 rounded-lg font-semibold transition-all duration-200 inline-flex items-center gap-2 border border-emerald-200"
+                  className="bg-white text-emerald-600 hover:bg-emerald-50 px-8 py-4 rounded-lg font-semibold transition-all duration-200 inline-flex items-center gap-2 border border-emerald-200 cursor-pointer"
                 >
                   <DollarSign className="w-5 h-5" />
                   Calculate Your ROI
-                </motion.button>
+                </motion.div>
               </Link>
             </div>
             <div className="flex items-center justify-center gap-8 text-sm text-gray-600 dark:text-gray-400">
