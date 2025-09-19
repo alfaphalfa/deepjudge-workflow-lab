@@ -1,14 +1,31 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import { Brain } from 'lucide-react';
-import KnowledgeSearch from '@/components/workflows/KnowledgeSearch';
-import KnowledgeGraph from '@/components/workflows/KnowledgeGraph';
 import { SearchResult, KnowledgeItem, calculateROI, knowledgeBase } from '@/lib/knowledge-data';
+
+// Dynamically import components to avoid SSR issues
+const KnowledgeSearch = dynamic(() => import('@/components/workflows/KnowledgeSearch'), {
+  ssr: false,
+  loading: () => <div className="text-center py-8">Loading search...</div>
+});
+
+const KnowledgeGraph = dynamic(() => import('@/components/workflows/KnowledgeGraph'), {
+  ssr: false,
+  loading: () => <div className="text-center py-8">Loading graph...</div>
+});
 
 export default function KnowledgeWorkflowPage() {
   const [activeTab, setActiveTab] = useState<'search' | 'graph' | 'roi'>('search');
-  const [selectedItem, setSelectedItem] = useState<KnowledgeItem | undefined>(knowledgeBase[0]);
+  const [selectedItem, setSelectedItem] = useState<KnowledgeItem | undefined>(undefined);
+
+  useEffect(() => {
+    // Set initial item after mount to avoid SSR issues
+    if (knowledgeBase && knowledgeBase.length > 0) {
+      setSelectedItem(knowledgeBase[0]);
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50">
