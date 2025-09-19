@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import { Brain } from 'lucide-react';
 
 // Dynamically import components to avoid SSR issues
 const KnowledgeSearch = dynamic(() => import('@/components/workflows/KnowledgeSearch'), {
@@ -21,7 +22,10 @@ export default function KnowledgeWorkflowPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="bg-emerald-600 text-white p-8">
-        <h1 className="text-4xl font-bold">Knowledge Activation</h1>
+        <h1 className="text-4xl font-bold flex items-center gap-3">
+          <Brain className="h-10 w-10" />
+          Knowledge Activation
+        </h1>
       </div>
 
       <div className="container mx-auto p-6">
@@ -70,6 +74,16 @@ export default function KnowledgeWorkflowPage() {
             <p className="text-gray-600">
               Calculate your savings with DeepJudge Knowledge Activation
             </p>
+            <div className="mt-6 p-4 bg-emerald-50 rounded-lg">
+              <h3 className="font-semibold text-emerald-800 mb-2">Expected Annual Savings</h3>
+              <p className="text-3xl font-bold text-emerald-600">$18,000 per lawyer</p>
+              <ul className="mt-4 space-y-2 text-sm text-gray-700">
+                <li>• 8+ hours saved weekly</li>
+                <li>• 92% user adoption rate</li>
+                <li>• 30 years of expertise captured</li>
+                <li>• 350% ROI in year one</li>
+              </ul>
+            </div>
           </div>
         )}
       </div>
