@@ -1,22 +1,25 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ArrowRight, BarChart3, FileText, Users, Zap, Shield, Clock, TrendingUp, CheckCircle, Star } from 'lucide-react';
+import { ArrowRight, BarChart3, FileText, Users, Zap, Shield, Clock, TrendingUp, CheckCircle, Star, Brain, Search, DollarSign, Sparkles } from 'lucide-react';
+import Link from 'next/link';
 
 export default function HomePage() {
   const stats = [
-    { label: 'User Adoption', value: '90%', icon: Users, color: 'text-accent-500' },
-    { label: 'Hours Saved Daily', value: '4+', icon: Clock, color: 'text-primary-600' },
-    { label: 'Document Accuracy', value: '99.5%', icon: FileText, color: 'text-secondary-500' },
-    { label: 'ROI First Year', value: '350%', icon: TrendingUp, color: 'text-accent-500' },
+    { label: 'User Adoption', value: '92%', icon: Users, color: 'text-accent-500' },
+    { label: 'Hours Saved Weekly', value: '8+', icon: Clock, color: 'text-primary-600' },
+    { label: 'Knowledge Captured', value: '30 yrs', icon: Brain, color: 'text-secondary-500' },
+    { label: 'Cost Savings/Lawyer', value: '$18K', icon: DollarSign, color: 'text-accent-500' },
   ];
 
   const features = [
     {
-      title: 'Intelligent Workflow Orchestration',
-      description: 'AI-driven task routing and parallel processing for maximum efficiency',
-      icon: Zap,
-      gradient: 'from-primary-500 to-primary-700',
+      title: 'Knowledge Activation',
+      description: 'Capture 30 years of retiring partner expertise with AI-powered semantic search',
+      icon: Brain,
+      gradient: 'from-emerald-500 to-green-600',
+      highlight: true,
+      link: '/workflows/knowledge',
     },
     {
       title: 'Document Intelligence',
@@ -79,31 +82,33 @@ export default function HomePage() {
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-2 mb-6 text-sm font-semibold text-primary-700 bg-primary-50 rounded-full"
+              className="inline-flex items-center gap-2 px-4 py-2 mb-6 text-sm font-semibold text-emerald-700 bg-emerald-50 rounded-full"
             >
-              <Star className="w-4 h-4 text-accent-500" />
-              90% User Adoption Rate
+              <Brain className="w-4 h-4 text-emerald-500" />
+              30 Years of Partner Expertise Captured
             </motion.div>
 
             <h1 className="text-5xl lg:text-7xl font-bold tracking-tight text-gray-900 dark:text-white mb-6">
-              Legal Workflow
+              Knowledge Activation
               <span className="block gradient-text">Intelligence Platform</span>
             </h1>
 
             <p className="text-xl lg:text-2xl text-gray-600 dark:text-gray-300 mb-10 max-w-3xl mx-auto">
-              Transform your legal operations with AI-powered automation.
-              Save 4+ hours daily. Achieve 99.5% accuracy. Join 150+ firms already revolutionizing their practice.
+              Transform retiring partner expertise into AI-powered legal intelligence.
+              Save 8+ hours weekly. Achieve 92% adoption. Capture decades of institutional knowledge.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="btn-primary inline-flex items-center gap-2"
-              >
-                Start Free Trial
-                <ArrowRight className="w-5 h-5" />
-              </motion.button>
+              <Link href="/workflows/knowledge">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="btn-primary inline-flex items-center gap-2"
+                >
+                  Explore Knowledge Activation
+                  <ArrowRight className="w-5 h-5" />
+                </motion.button>
+              </Link>
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -166,20 +171,94 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="glass-effect rounded-xl p-8 card-hover"
+                className={`glass-effect rounded-xl p-8 card-hover ${feature.highlight ? 'ring-2 ring-emerald-500 ring-offset-2' : ''}`}
               >
+                {feature.highlight && (
+                  <div className="inline-flex items-center gap-2 px-3 py-1 mb-4 text-xs font-semibold text-emerald-700 bg-emerald-50 rounded-full">
+                    <Sparkles className="w-3 h-3" />
+                    Featured Workflow
+                  </div>
+                )}
                 <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-4`}>
                   <feature.icon className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600 dark:text-gray-300">
+                <p className="text-gray-600 dark:text-gray-300 mb-4">
                   {feature.description}
                 </p>
+                {feature.link && (
+                  <Link href={feature.link}>
+                    <motion.button
+                      whileHover={{ x: 5 }}
+                      className="inline-flex items-center gap-2 text-emerald-600 font-semibold hover:text-emerald-700 transition-colors"
+                    >
+                      Learn More
+                      <ArrowRight className="w-4 h-4" />
+                    </motion.button>
+                  </Link>
+                )}
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Knowledge Activation CTA */}
+      <section className="py-20 bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-900/20 dark:to-green-900/20">
+        <div className="max-width-container section-padding">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="glass-effect rounded-2xl p-12 text-center"
+          >
+            <Brain className="w-16 h-16 mx-auto mb-6 text-emerald-600" />
+            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              Transform 30 Years of Expertise into Instant Intelligence
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
+              Our Knowledge Activation workflow captures retiring partner knowledge with AI-powered semantic search
+              that understands context, not just keywords. Achieve 92% adoption while saving $18,000 per lawyer annually.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+              <Link href="/workflows/knowledge">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="bg-emerald-600 text-white hover:bg-emerald-700 px-8 py-4 rounded-lg font-semibold transition-all duration-200 inline-flex items-center gap-2"
+                >
+                  <Search className="w-5 h-5" />
+                  Try Knowledge Search Demo
+                </motion.button>
+              </Link>
+              <Link href="/workflows/knowledge#roi">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="bg-white text-emerald-600 hover:bg-emerald-50 px-8 py-4 rounded-lg font-semibold transition-all duration-200 inline-flex items-center gap-2 border border-emerald-200"
+                >
+                  <DollarSign className="w-5 h-5" />
+                  Calculate Your ROI
+                </motion.button>
+              </Link>
+            </div>
+            <div className="flex items-center justify-center gap-8 text-sm text-gray-600 dark:text-gray-400">
+              <div className="flex items-center gap-2">
+                <CheckCircle className="w-5 h-5 text-emerald-500" />
+                Natural language search
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="w-5 h-5 text-emerald-500" />
+                Ethical wall compliance
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="w-5 h-5 text-emerald-500" />
+                99% confidence scores
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
