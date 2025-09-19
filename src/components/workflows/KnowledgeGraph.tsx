@@ -1,65 +1,28 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
-import ReactFlow, {
-  Node,
-  Edge,
-  useNodesState,
-  useEdgesState,
-  Controls,
-  Background,
-  MiniMap,
-  BackgroundVariant,
-  ConnectionMode,
-  NodeTypes,
-  Position
-} from 'reactflow';
-import 'reactflow/dist/style.css';
+import { useEffect, useState, useCallback, useMemo } from 'react';
+import dynamic from 'next/dynamic';
 import { Network, Brain, FileText, Scale, Shield } from 'lucide-react';
 import { KnowledgeItem, generateKnowledgeGraph } from '@/lib/knowledge-data';
 
-// Custom node component
-const CustomNode = ({ data }: { data: any }) => {
-  const getIcon = () => {
-    switch (data.type) {
-      case 'contract': return <FileText className="h-4 w-4" />;
-      case 'precedent': return <Scale className="h-4 w-4" />;
-      case 'opinion': return <Brain className="h-4 w-4" />;
-      default: return <FileText className="h-4 w-4" />;
-    }
-  };
+// Import ReactFlow CSS at the top level
+import 'reactflow/dist/style.css';
 
-  return (
-    <div
-      className={`px-4 py-3 rounded-lg border-2 ${data.isCenter ? 'border-emerald-500 bg-emerald-50' : 'border-gray-300 bg-white'} shadow-md hover:shadow-lg transition-shadow`}
-      style={{ minWidth: '150px', maxWidth: '250px' }}
-    >
-      <div className="flex items-center gap-2 mb-1">
-        {getIcon()}
-        <div className="text-xs font-medium text-gray-500 uppercase">{data.type}</div>
+// Dynamically import ReactFlow to avoid SSR issues
+const ReactFlowComponent = dynamic(
+  () => import('reactflow'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-full w-full flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto mb-4"></div>
+          <p className="text-gray-500">Loading Knowledge Graph...</p>
+        </div>
       </div>
-      <div className="text-sm font-medium text-gray-900 line-clamp-2">{data.label}</div>
-      {data.confidence && (
-        <div className="mt-2 flex items-center gap-2">
-          <div className="text-xs text-gray-500">Confidence:</div>
-          <div className={`text-xs font-medium ${data.confidence > 0.9 ? 'text-emerald-600' : data.confidence > 0.7 ? 'text-yellow-600' : 'text-gray-600'}`}>
-            {Math.round(data.confidence * 100)}%
-          </div>
-        </div>
-      )}
-      {data.compliant && (
-        <div className="mt-1 flex items-center gap-1">
-          <Shield className="h-3 w-3 text-green-600" />
-          <span className="text-xs text-green-600">Compliant</span>
-        </div>
-      )}
-    </div>
-  );
-};
-
-const nodeTypes: NodeTypes = {
-  custom: CustomNode,
-};
+    )
+  }
+);
 
 interface KnowledgeGraphProps {
   centerItem?: KnowledgeItem;
@@ -67,10 +30,17 @@ interface KnowledgeGraphProps {
 }
 
 export default function KnowledgeGraph({ centerItem, onNodeClick }: KnowledgeGraphProps) {
-  const [nodes, setNodes, onNodesChange] = useNodesState([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [nodes, setNodes] = useState<any[]>([]);
+  const [edges, setEdges] = useState<any[]>([]);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isClient) return;
+
     console.log('KnowledgeGraph: Generating graph for centerItem:', centerItem?.id);
 
     const graphData = generateKnowledgeGraph(centerItem);
@@ -81,15 +51,13 @@ export default function KnowledgeGraph({ centerItem, onNodeClick }: KnowledgeGra
 
     if (graphData.nodes.length === 0) {
       // Create a default node if no data
-      const defaultNodes: Node[] = [
+      const defaultNodes = [
         {
           id: 'default',
-          type: 'custom',
+          type: 'default',
           position: { x: 400, y: 300 },
           data: {
-            label: 'Select a document to explore connections',
-            type: 'info',
-            isCenter: true
+            label: 'Select a document from search to explore connections'
           }
         }
       ];
@@ -103,7 +71,7 @@ export default function KnowledgeGraph({ centerItem, onNodeClick }: KnowledgeGra
     const centerY = 300;
     const radius = 250;
 
-    const flowNodes: Node[] = graphData.nodes.map((node, index) => {
+    const flowNodes = graphData.nodes.map((node, index) => {
       let x = centerX;
       let y = centerY;
 
@@ -114,26 +82,28 @@ export default function KnowledgeGraph({ centerItem, onNodeClick }: KnowledgeGra
         y = centerY + Math.sin(angle) * radius * (node.size / 20);
       }
 
-      // Find the corresponding knowledge item for additional data
-      const item = centerItem && node.id === centerItem.id ? centerItem : null;
-
       return {
         id: node.id,
-        type: 'custom',
+        type: 'default',
         position: { x, y },
         data: {
-          label: node.label.replace('...', ''),
-          type: node.type,
-          isCenter: index === 0,
-          confidence: item?.confidenceScore,
-          compliant: item?.ethicalWallCompliant
+          label: (
+            <div className={`px-3 py-2 ${index === 0 ? 'bg-emerald-100 border-emerald-500' : 'bg-white'} border-2 rounded-lg`}>
+              <div className="text-xs font-medium text-gray-600 mb-1">{node.type}</div>
+              <div className="text-sm font-medium text-gray-900 line-clamp-2">
+                {node.label.replace('...', '')}
+              </div>
+            </div>
+          )
         },
-        sourcePosition: Position.Right,
-        targetPosition: Position.Left
+        style: {
+          width: 200,
+          height: 'auto',
+        }
       };
     });
 
-    const flowEdges: Edge[] = graphData.edges.map((edge, index) => ({
+    const flowEdges = graphData.edges.map((edge) => ({
       id: `${edge.source}-${edge.target}`,
       source: edge.source,
       target: edge.target,
@@ -152,50 +122,35 @@ export default function KnowledgeGraph({ centerItem, onNodeClick }: KnowledgeGra
 
     setNodes(flowNodes);
     setEdges(flowEdges);
-  }, [centerItem, setNodes, setEdges]);
+  }, [centerItem, isClient]);
 
-  const onNodeClickHandler = useCallback((event: any, node: Node) => {
+  const onNodeClickHandler = useCallback((event: any, node: any) => {
     console.log('Node clicked:', node.id);
     if (node.id !== 'default') {
       onNodeClick?.(node.id);
     }
   }, [onNodeClick]);
 
+  if (!isClient) {
+    return (
+      <div className="h-full w-full flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto mb-4"></div>
+          <p className="text-gray-500">Initializing Knowledge Graph...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="h-full w-full bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl">
-      <ReactFlow
+    <div className="h-full w-full bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl relative">
+      <ReactFlowComponent
         nodes={nodes}
         edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
         onNodeClick={onNodeClickHandler}
-        nodeTypes={nodeTypes}
-        connectionMode={ConnectionMode.Loose}
         fitView
         attributionPosition="bottom-left"
-        proOptions={{ hideAttribution: true }}
-      >
-        <Background
-          variant={BackgroundVariant.Dots}
-          gap={20}
-          size={1}
-          color="#d1d5db"
-        />
-        <Controls
-          showZoom={true}
-          showFitView={true}
-          showInteractive={true}
-        />
-        <MiniMap
-          nodeColor={(node) => {
-            if (node.data?.isCenter) return '#059669';
-            return '#9ca3af';
-          }}
-          nodeStrokeWidth={3}
-          pannable
-          zoomable
-        />
-      </ReactFlow>
+      />
 
       {/* Legend */}
       <div className="absolute bottom-4 left-4 bg-white rounded-lg shadow-md p-4 z-10">
