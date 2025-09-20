@@ -1,10 +1,16 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ArrowRight, BarChart3, FileText, Users, Zap, Shield, Clock, TrendingUp, CheckCircle, Star, Brain, Search, DollarSign, Sparkles } from 'lucide-react';
+import { useState } from 'react';
+import { ArrowRight, BarChart3, FileText, Users, Zap, Shield, Clock, TrendingUp, CheckCircle, Star, Brain, Search, DollarSign, Sparkles, Workflow } from 'lucide-react';
 import Link from 'next/link';
+import AdoptionMetrics from '@/components/AdoptionMetrics';
+import PracticeAreaSelector from '@/components/PracticeAreaSelector';
+import type { PracticeArea } from '@/components/PracticeAreaSelector';
 
 export default function HomePage() {
+  const [selectedPracticeArea, setSelectedPracticeArea] = useState<PracticeArea | null>(null);
+
   const stats = [
     { label: 'User Adoption', value: '92%', icon: Users, color: 'text-accent-500' },
     { label: 'Hours Saved Weekly', value: '8+', icon: Clock, color: 'text-primary-600' },
@@ -14,56 +20,31 @@ export default function HomePage() {
 
   const features = [
     {
-      title: 'Knowledge Activation',
-      description: 'Capture 30 years of retiring partner expertise with AI-powered semantic search',
-      icon: Brain,
-      gradient: 'from-emerald-500 to-green-600',
-      highlight: true,
-      link: '/workflows/knowledge',
-    },
-    {
-      title: 'Document Intelligence',
-      description: '99.5% accuracy in legal document parsing across 50+ jurisdictions',
-      icon: FileText,
-      gradient: 'from-secondary-500 to-secondary-700',
-    },
-    {
-      title: 'Predictive Analytics',
-      description: 'Data-driven insights for case outcomes and resource optimization',
-      icon: BarChart3,
-      gradient: 'from-accent-500 to-accent-700',
-    },
-    {
       title: 'Enterprise Security',
       description: 'SOC 2 Type II certified with end-to-end encryption',
       icon: Shield,
       gradient: 'from-primary-600 to-secondary-600',
     },
+    {
+      title: 'Real-Time Analytics',
+      description: 'Track adoption, ROI, and usage metrics across your firm',
+      icon: BarChart3,
+      gradient: 'from-purple-500 to-purple-700',
+    },
+    {
+      title: 'Multi-Jurisdiction Support',
+      description: 'Legal compliance across 50+ global jurisdictions',
+      icon: Users,
+      gradient: 'from-orange-500 to-orange-700',
+    },
+    {
+      title: 'API Integration',
+      description: 'Seamlessly integrate with existing legal tech stack',
+      icon: Zap,
+      gradient: 'from-pink-500 to-pink-700',
+    },
   ];
 
-  const testimonials = [
-    {
-      quote: "DeepJudge transformed our practice. We're saving 4+ hours per attorney daily.",
-      author: 'Sarah Chen',
-      role: 'Managing Partner',
-      company: 'Chen & Associates',
-      rating: 5,
-    },
-    {
-      quote: "The 90% adoption rate speaks for itself. Our team actually loves using it.",
-      author: 'Michael Roberts',
-      role: 'General Counsel',
-      company: 'Fortune 500 Corp',
-      rating: 5,
-    },
-    {
-      quote: "ROI of 350% in year one. Best legal tech investment we've ever made.",
-      author: 'Jennifer Walsh',
-      role: 'COO',
-      company: 'Walsh Legal Group',
-      rating: 5,
-    },
-  ];
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
@@ -97,32 +78,123 @@ export default function HomePage() {
               Transform retiring partner expertise into AI-powered legal intelligence.
               Save 8+ hours weekly. Achieve 92% adoption. Capture decades of institutional knowledge.
             </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/workflows/knowledge" className="inline-block">
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="btn-primary inline-flex items-center gap-2"
-                >
-                  Explore Knowledge Activation
-                  <ArrowRight className="w-5 h-5" />
-                </motion.div>
-              </Link>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-6 py-3 rounded-lg font-semibold bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-750 transition-all duration-200"
-              >
-                Watch Demo
-              </motion.button>
-            </div>
           </motion.div>
         </div>
       </section>
 
+      {/* Featured Workflows Section */}
+      <section className="py-20 bg-white dark:bg-gray-900">
+        <div className="max-width-container section-padding">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+              Featured Workflows
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+              Explore our powerful AI-driven workflows designed for legal professionals
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="glass-effect rounded-xl p-8 card-hover ring-2 ring-emerald-500 ring-offset-2"
+            >
+              <div className="inline-flex items-center gap-2 px-3 py-1 mb-4 text-xs font-semibold text-emerald-700 bg-emerald-50 rounded-full">
+                <Sparkles className="w-3 h-3" />
+                Featured Workflow
+              </div>
+              <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center mb-4">
+                <Brain className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+                Knowledge Activation
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">
+                Capture 30 years of retiring partner expertise with AI-powered semantic search
+              </p>
+              <Link href="/workflows/knowledge" className="inline-block">
+                <motion.div
+                  whileHover={{ x: 5 }}
+                  className="inline-flex items-center gap-2 text-emerald-600 font-semibold hover:text-emerald-700 transition-colors cursor-pointer"
+                >
+                  Learn More
+                  <ArrowRight className="w-4 h-4" />
+                </motion.div>
+              </Link>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="glass-effect rounded-xl p-8 card-hover ring-2 ring-emerald-500 ring-offset-2"
+            >
+              <div className="inline-flex items-center gap-2 px-3 py-1 mb-4 text-xs font-semibold text-emerald-700 bg-emerald-50 rounded-full">
+                <Sparkles className="w-3 h-3" />
+                Featured Workflow
+              </div>
+              <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center mb-4">
+                <Workflow className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+                Workflow Builder
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">
+                Visual drag-and-drop automation builder for non-technical lawyers
+              </p>
+              <Link href="/workflows/builder" className="inline-block">
+                <motion.div
+                  whileHover={{ x: 5 }}
+                  className="inline-flex items-center gap-2 text-emerald-600 font-semibold hover:text-emerald-700 transition-colors cursor-pointer"
+                >
+                  Learn More
+                  <ArrowRight className="w-4 h-4" />
+                </motion.div>
+              </Link>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="glass-effect rounded-xl p-8 card-hover ring-2 ring-emerald-500 ring-offset-2"
+            >
+              <div className="inline-flex items-center gap-2 px-3 py-1 mb-4 text-xs font-semibold text-emerald-700 bg-emerald-50 rounded-full">
+                <Sparkles className="w-3 h-3" />
+                Featured Workflow
+              </div>
+              <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-secondary-500 to-secondary-700 flex items-center justify-center mb-4">
+                <FileText className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+                Document Intelligence
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">
+                99.5% accuracy in legal document parsing across 50+ jurisdictions
+              </p>
+              <Link href="/workflows/document-intelligence" className="inline-block">
+                <motion.div
+                  whileHover={{ x: 5 }}
+                  className="inline-flex items-center gap-2 text-emerald-600 font-semibold hover:text-emerald-700 transition-colors cursor-pointer"
+                >
+                  Learn More
+                  <ArrowRight className="w-4 h-4" />
+                </motion.div>
+              </Link>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* Stats Section */}
-      <section className="py-16 bg-white dark:bg-gray-900">
+      <section className="py-16 bg-gray-50 dark:bg-gray-800">
         <div className="max-width-container section-padding">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
@@ -146,8 +218,32 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Practice Area Selector */}
+      <section className="py-20 bg-white dark:bg-gray-900">
+        <div className="max-width-container section-padding">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+              Tailored Solutions for Every Practice
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+              Select your practice area to see specialized workflows, ROI metrics, and success stories
+            </p>
+          </motion.div>
+
+          <PracticeAreaSelector
+            onSelectArea={setSelectedPracticeArea}
+            selectedAreaId="corporate"
+          />
+        </div>
+      </section>
+
       {/* Features Grid */}
-      <section className="py-20 bg-gray-50 dark:bg-gray-800">
+      <section className="py-20 bg-white dark:bg-gray-900">
         <div className="max-width-container section-padding">
           <motion.div
             initial={{ opacity: 0 }}
@@ -171,39 +267,25 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className={`glass-effect rounded-xl p-8 card-hover ${feature.highlight ? 'ring-2 ring-emerald-500 ring-offset-2' : ''}`}
+                className="glass-effect rounded-xl p-8 card-hover"
               >
-                {feature.highlight && (
-                  <div className="inline-flex items-center gap-2 px-3 py-1 mb-4 text-xs font-semibold text-emerald-700 bg-emerald-50 rounded-full">
-                    <Sparkles className="w-3 h-3" />
-                    Featured Workflow
-                  </div>
-                )}
                 <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-4`}>
                   <feature.icon className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600 dark:text-gray-300 mb-4">
+                <p className="text-gray-600 dark:text-gray-300">
                   {feature.description}
                 </p>
-                {feature.link && (
-                  <Link href={feature.link} className="inline-block">
-                    <motion.div
-                      whileHover={{ x: 5 }}
-                      className="inline-flex items-center gap-2 text-emerald-600 font-semibold hover:text-emerald-700 transition-colors cursor-pointer"
-                    >
-                      Learn More
-                      <ArrowRight className="w-4 h-4" />
-                    </motion.div>
-                  </Link>
-                )}
               </motion.div>
             ))}
           </div>
         </div>
       </section>
+
+      {/* Adoption Metrics Section */}
+      <AdoptionMetrics />
 
       {/* Knowledge Activation CTA */}
       <section className="py-20 bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-900/20 dark:to-green-900/20">
@@ -262,56 +344,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-20 bg-white dark:bg-gray-900">
-        <div className="max-width-container section-padding">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-              Trusted by Leading Law Firms
-            </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300">
-              Join 150+ firms experiencing the DeepJudge difference
-            </p>
-          </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="bg-gray-50 dark:bg-gray-800 rounded-xl p-6"
-              >
-                <div className="flex mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 text-yellow-500 fill-current" />
-                  ))}
-                </div>
-                <p className="text-gray-700 dark:text-gray-300 mb-6 italic">
-                  "{testimonial.quote}"
-                </p>
-                <div>
-                  <div className="font-semibold text-gray-900 dark:text-white">
-                    {testimonial.author}
-                  </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
-                    {testimonial.role}, {testimonial.company}
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
+      {/* Footer Section */}
       <section className="py-20 bg-gradient-to-r from-primary-600 to-secondary-600">
         <div className="max-width-container section-padding text-center">
           <motion.div
@@ -319,44 +353,9 @@ export default function HomePage() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
-              Ready to Transform Your Legal Practice?
-            </h2>
-            <p className="text-xl text-white/90 mb-10 max-w-2xl mx-auto">
-              Join the 90% of users who can't imagine working without DeepJudge.
-              Start your free trial today.
+            <p className="text-xl text-white/90 max-w-2xl mx-auto">
+              Built by Kevin J. Andrews, Esq., candidate for Legal Workflow Engineer
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-white text-primary-600 hover:bg-gray-100 px-8 py-4 rounded-lg font-semibold transition-all duration-200 inline-flex items-center gap-2"
-              >
-                Start Free 30-Day Trial
-                <ArrowRight className="w-5 h-5" />
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-transparent text-white border-2 border-white hover:bg-white/10 px-8 py-4 rounded-lg font-semibold transition-all duration-200"
-              >
-                Schedule Demo
-              </motion.button>
-            </div>
-            <div className="mt-8 flex items-center justify-center gap-8 text-white/80">
-              <div className="flex items-center gap-2">
-                <CheckCircle className="w-5 h-5" />
-                No credit card required
-              </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle className="w-5 h-5" />
-                Full access to all features
-              </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle className="w-5 h-5" />
-                White-glove onboarding
-              </div>
-            </div>
           </motion.div>
         </div>
       </section>

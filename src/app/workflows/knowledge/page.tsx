@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import { Brain } from 'lucide-react';
+import Link from 'next/link';
+import { Brain, Home } from 'lucide-react';
 
 // Dynamically import components to avoid SSR issues
 const KnowledgeSearch = dynamic(() => import('@/components/workflows/KnowledgeSearch'), {
@@ -15,17 +16,41 @@ const KnowledgeGraph = dynamic(() => import('@/components/workflows/KnowledgeGra
   loading: () => <div className="text-center py-8">Loading graph...</div>
 });
 
+const MatterQA = dynamic(() => import('@/components/workflows/MatterQA'), {
+  ssr: false,
+  loading: () => <div className="text-center py-8">Loading Matter Q&A...</div>
+});
+
+const ROICalculator = dynamic(() => import('@/components/workflows/ROICalculator'), {
+  ssr: false,
+  loading: () => <div className="text-center py-8">Loading ROI Calculator...</div>
+});
+
+const PromptLab = dynamic(() => import('@/components/workflows/PromptLab'), {
+  ssr: false,
+  loading: () => <div className="text-center py-8">Loading Prompt Lab...</div>
+});
+
 export default function KnowledgeWorkflowPage() {
-  const [activeTab, setActiveTab] = useState<'search' | 'graph' | 'roi'>('search');
+  const [activeTab, setActiveTab] = useState<'search' | 'graph' | 'matterqa' | 'roi' | 'promptlab'>('search');
   const [selectedItem, setSelectedItem] = useState<any>(undefined);
 
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="bg-emerald-600 text-white p-8">
-        <h1 className="text-4xl font-bold flex items-center gap-3">
-          <Brain className="h-10 w-10" />
-          Knowledge Activation
-        </h1>
+        <div className="flex items-center justify-between">
+          <h1 className="text-4xl font-bold flex items-center gap-3">
+            <Brain className="h-10 w-10" />
+            Knowledge Activation
+          </h1>
+          <Link
+            href="/"
+            className="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors"
+          >
+            <Home className="h-5 w-5" />
+            <span className="font-medium">Home</span>
+          </Link>
+        </div>
       </div>
 
       <div className="container mx-auto p-6">
@@ -47,12 +72,28 @@ export default function KnowledgeWorkflowPage() {
             Graph
           </button>
           <button
+            onClick={() => setActiveTab('matterqa')}
+            className={`px-4 py-2 rounded ${
+              activeTab === 'matterqa' ? 'bg-emerald-600 text-white' : 'bg-gray-200'
+            }`}
+          >
+            Matter Q&A
+          </button>
+          <button
             onClick={() => setActiveTab('roi')}
             className={`px-4 py-2 rounded ${
               activeTab === 'roi' ? 'bg-emerald-600 text-white' : 'bg-gray-200'
             }`}
           >
             ROI
+          </button>
+          <button
+            onClick={() => setActiveTab('promptlab')}
+            className={`px-4 py-2 rounded ${
+              activeTab === 'promptlab' ? 'bg-emerald-600 text-white' : 'bg-gray-200'
+            }`}
+          >
+            Prompt Lab
           </button>
         </div>
 
@@ -68,22 +109,21 @@ export default function KnowledgeWorkflowPage() {
           </div>
         )}
 
+        {activeTab === 'matterqa' && (
+          <div>
+            <MatterQA />
+          </div>
+        )}
+
         {activeTab === 'roi' && (
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-2xl font-bold mb-4">ROI Calculator</h2>
-            <p className="text-gray-600">
-              Calculate your savings with DeepJudge Knowledge Activation
-            </p>
-            <div className="mt-6 p-4 bg-emerald-50 rounded-lg">
-              <h3 className="font-semibold text-emerald-800 mb-2">Expected Annual Savings</h3>
-              <p className="text-3xl font-bold text-emerald-600">$18,000 per lawyer</p>
-              <ul className="mt-4 space-y-2 text-sm text-gray-700">
-                <li>• 8+ hours saved weekly</li>
-                <li>• 92% user adoption rate</li>
-                <li>• 30 years of expertise captured</li>
-                <li>• 350% ROI in year one</li>
-              </ul>
-            </div>
+          <div>
+            <ROICalculator />
+          </div>
+        )}
+
+        {activeTab === 'promptlab' && (
+          <div>
+            <PromptLab />
           </div>
         )}
       </div>
