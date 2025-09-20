@@ -149,12 +149,7 @@ This project is proprietary software. See [LICENSE](LICENSE) for details.
 - [Support Portal](https://support.deepjudge.ai)
 - [Status Page](https://status.deepjudge.ai)
 
-## 💬 Contact
-
-- **Sales**: sales@deepjudge.ai
-- **Support**: support@deepjudge.ai
-- **Partnership**: partners@deepjudge.ai
 
 ---
 
-Built with ❤️ by DeepJudge - Transforming Legal Workflows with AI
+Built with by Kevin J. Andrews, Esq., candidate for Legal Workflow Engineer
